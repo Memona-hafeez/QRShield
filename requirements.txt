@@ -1,0 +1,11 @@
+streamlit
+opencv-python
+numpy
+tensorflow
+scikit-learn
+joblib
+cryptography
+qrcode[pil]
+Pillow
+requests
+python-dotenv
