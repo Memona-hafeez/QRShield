@@ -124,8 +124,8 @@ QRShield/
 
 ```bash
 # 1. Clone
-git clone https://github.com/Memona-hafeez/SecureQRApp.git
-cd SecureQRApp
+git clone https://github.com/Memona-hafeez/QRShield.git
+cd QRShield
 
 # 2. Create and activate a virtual environment
 python -m venv .venv
@@ -139,8 +139,6 @@ source .venv/bin/activate
 # 3. Install dependencies
 pip install -r requirements.txt
 ```
-
-**Important:** After renaming the GitHub repository, GitHub normally redirects the old repository URL. You can also update the clone URL above to the new repository URL once the rename is complete.
 
 ### `requirements.txt`
 
@@ -207,7 +205,7 @@ python generate_keys.py
 python qr_generator.py
 ```
 
-Keep `ec_private.pem` **secret**. Only `ec_public.pem` is used by the scanner to verify signatures.
+Use your own private key and keep `ec_private.pem` **secret**. Only `ec_public.pem` is used by the scanner to verify signatures.
 
 ---
 
@@ -215,7 +213,7 @@ Keep `ec_private.pem` **secret**. Only `ec_public.pem` is used by the scanner to
 
 | Notebook                                                   | What it reproduces                                                                                                     |
 | :--------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------- |
-| `Tempered_Model/generate_tamper_dataset.py`                | Builds the 36,000-image synthetic tamper dataset                                                                       |
+| `Tempered_Model/generate_tamper_dataset.py`                | Re-implementation of the dataset generator (same structure and two tamper families; not bit-for-bit identical to the released 36,000 images) |
 | `Tempered_Model/Tempered_images_mmodel (3).ipynb`          | Trains EfficientNetB0; 6,000-image test, confusion matrix, Grad-CAM                                                    |
 | `Tempered_Model/model extra validation.py.ipynb`           | External robustness check (perturbations + unseen tamper types) → 84.9% / 51.7%                                        |
 | `URL_MODEL/Copy_of_qr_payload_analysis_newwwwww (3).ipynb` | 21-feature extraction, RF + XGBoost + MLP + LR on stratified & domain-disjoint splits, McNemar's test, duplicate audit |
@@ -226,18 +224,10 @@ The CSVs in `URL_MODEL/` (`secureqr_model_comparison.csv`, `secureqr_mcnemar_dom
 
 ## Security notice
 
-This is a research prototype. Two items **must** be fixed before real deployment:
+This is a research prototype.
 
-1. **Remove the committed private key.** A published private key lets anyone forge "authentic" signatures, which defeats Layer 4 entirely. Delete it from the repo and its git history, then regenerate a fresh key pair:
-
-```bash
-git rm --cached ec_private.pem
-echo "ec_private.pem" >> .gitignore
-echo ".env" >> .gitignore
-python generate_keys.py
-```
-
-2. **Do not commit `.env`.** Add it to `.gitignore` so API keys and secrets stay out of version control.
+1. **Use your own private key.** This repository does not include any private key. Generate your own ECDSA P-256 key pair with `python generate_keys.py`, keep `ec_private.pem` secret, and never commit it. Only `ec_public.pem` is needed by the scanner to verify signatures.
+2. **Do not commit `.env`.** Keep API keys and secrets out of version control by adding `.env` to `.gitignore`.
 
 Also note: a valid TLS certificate proves the connection is encrypted, **not** that the site is benign. Phishing sites can hold valid certificates. Layer 3 complements, but does not replace, Layer 2.
 
