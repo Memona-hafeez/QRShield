@@ -81,6 +81,15 @@ All numbers below are reproducible from the notebooks in this repository and are
 
 > The 100% figure is an **in-distribution upper bound only.** The external robustness check shows the detector does not yet generalize to real-world capture conditions or new tamper types.
 
+**External robustness test sets.** Both external checks are generated from the same 224×224 preprocessing pipeline and evaluated with the trained `qr_model.h5`; they were never used for training or model selection.
+
+| Test set                              | # images | Tampered / clean | Details                                                                 |
+| :------------------------------------ | :------- | :--------------- | :---------------------------------------------------------------------- |
+| Combined camera-like degradation      | [N]      | [X] / [Y]        | [degradations applied, e.g. blur, noise, brightness, JPEG, perspective] |
+| Unseen tamper types                   | [N]      | [X] / [Y]        | [tamper types not seen in training, and how they were generated]        |
+
+> If the unseen-tamper set is class-balanced, 50% is chance level, so 51.7% means the detector shows essentially no transfer to these tamper types. See `Tempered_Model/model extra validation.py.ipynb` for the exact construction.
+
 **Layer 2 — URL classifier** · public corpus of **651,191** URLs
 
 | Model                                   | Stratified acc. | Domain-disjoint acc. |
@@ -220,14 +229,15 @@ Use your own private key and keep `ec_private.pem` **secret**. Only `ec_public.p
 
 The CSVs in `URL_MODEL/` (`secureqr_model_comparison.csv`, `secureqr_mcnemar_domain_disjoint.csv`, `secureqr_table_iv_percent.csv`) contain the exact figures reported in the paper.
 
+**Archived release.** A permanent, citable snapshot of this repository is available on Zenodo: DOI [10.5281/zenodo.XXXXXXX](https://doi.org/10.5281/zenodo.XXXXXXX).
+
 ---
 
 ## Security notice
 
 This is a research prototype.
 
-1. **Use your own private key.** This repository does not include any private key. Generate your own ECDSA P-256 key pair with `python generate_keys.py`, keep `ec_private.pem` secret, and never commit it. Only `ec_public.pem` is needed by the scanner to verify signatures.
-2. **Do not commit `.env`.** Keep API keys and secrets out of version control by adding `.env` to `.gitignore`.
+**Use your own private key.** This repository does not include any private key. Generate your own ECDSA P-256 key pair with `python generate_keys.py`, keep `ec_private.pem` secret, and never commit it. Only `ec_public.pem` is needed by the scanner to verify signatures.
 
 Also note: a valid TLS certificate proves the connection is encrypted, **not** that the site is benign. Phishing sites can hold valid certificates. Layer 3 complements, but does not replace, Layer 2.
 
@@ -256,6 +266,7 @@ If you use QRShield in your research, please cite:
   title   = {QRShield: A Multi-Layer Framework for Secure QR Code Detection and Malicious URL Classification},
   author  = {Hafeez, Memona and Abdulhaq, Nimra},
   year    = {2026},
+  doi     = {10.5281/zenodo.XXXXXXX},
   note    = {Manuscript. Dept. of Data Science and Artificial Intelligence,
              Khwaja Fareed University of Engineering and Information Technology (KFUEIT)}
 }
