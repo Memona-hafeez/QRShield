@@ -89,9 +89,26 @@ All numbers below are reproducible from the notebooks in this repository and are
 | A. Combined camera-like degradation                        | 1,000          | 500 / 500        | **84.90%** (95% CI 82.53–87.06); 151/500 tampered missed, 0/500 clean flagged            |
 | C. New unseen codes + unseen tamper types                  | 600            | 300 / 300        | **51.67%** (95% CI 47.59–55.73); 289/300 tampered missed, 1/300 clean flagged            |
 
-![Per-condition output of the external robustness check (Tempered_Model/model extra validation notebook)](external_validation_output.png)
+Per-condition results (from `Tempered_Model/model extra validation.py.ipynb`):
 
-*Output of `Tempered_Model/model extra validation.py.ipynb`. Set A: 500 tampered + 500 clean images per condition; set C: 300 tampered + 300 clean.*
+| Condition | Correct | Accuracy | 95% CI | Tampered missed | Clean flagged |
+| :-- | --: | --: | --: | --: | --: |
+| A: none (baseline) | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: JPEG q70 | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: JPEG q40 | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: Gaussian blur r1 | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: Gaussian blur r2 | 963/1000 | 96.30% | 94.94–97.38 | 0/500 | 37/500 |
+| A: down/up ×2 | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: down/up ×4 | 960/1000 | 96.00% | 94.59–97.13 | 1/500 | 39/500 |
+| A: rotate +5° | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: rotate −5° | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: brightness 0.6 | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: brightness 1.4 | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: contrast 0.6 | 1000/1000 | 100.00% | 99.63–100.00 | 0/500 | 0/500 |
+| A: noise σ = 10 | 986/1000 | 98.60% | 97.66–99.23 | 14/500 | 0/500 |
+| A: noise σ = 25 | 572/1000 | 57.20% | 54.07–60.29 | 428/500 | 0/500 |
+| A: camera-like combo | 849/1000 | 84.90% | 82.53–87.06 | 151/500 | 0/500 |
+| C: new unseen codes + tamper (300 + 300) | 310/600 | 51.67% | 47.59–55.73 | 289/300 | 1/300 |
 
 Single perturbations in set A: JPEG (q70, q40), Gaussian blur (r1, r2), down/up-sampling (×2, ×4), rotation (±5°), brightness (0.6, 1.4), contrast (0.6), and Gaussian noise (σ = 10, 25). The unperturbed baseline and nine of the thirteen single perturbations reach 100.00%. The weakest single conditions are noise σ = 25 (57.20%, 428/500 tampered missed), blur r2 (96.30%, 37/500 clean flagged), down/up ×4 (96.00%, 39/500 clean flagged) and noise σ = 10 (98.60%).
 
