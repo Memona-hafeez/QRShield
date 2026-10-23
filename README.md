@@ -69,7 +69,7 @@ The scanner automatically detects whether a code is a plain URL or a signed JSON
 
 ## Key results
 
-All numbers below are reproducible from the notebooks in this repository and are reported in the accompanying paper.
+All numbers below are reproducible from the notebooks in this repository and are reported in the accompanying manuscript.
 
 **Layer 1 — Tamper detector (EfficientNetB0)** · balanced synthetic dataset of **36,000** images (two tamper families: *module corruption*, *patch overlay*)
 
@@ -81,14 +81,21 @@ All numbers below are reproducible from the notebooks in this repository and are
 
 > The 100% figure is an **in-distribution upper bound only.** The external robustness check shows the detector does not yet generalize to real-world capture conditions or new tamper types.
 
-**External robustness test sets.** Both external checks are generated from the same 224×224 preprocessing pipeline and evaluated with the trained `qr_model.h5`; they were never used for training or model selection.
+**External robustness test sets.** Both external checks are evaluated with the trained tamper detector (`qr_model.h5`).
 
-| Test set                              | # images | Tampered / clean | Details                                                                 |
-| :------------------------------------ | :------- | :--------------- | :---------------------------------------------------------------------- |
-| Combined camera-like degradation      | [N]      | [X] / [Y]        | [degradations applied, e.g. blur, noise, brightness, JPEG, perspective] |
-| Unseen tamper types                   | [N]      | [X] / [Y]        | [tamper types not seen in training, and how they were generated]        |
+| Test set                                                   | # images       | Tampered / clean | Result                                                                                   |
+| :--------------------------------------------------------- | :------------- | :--------------- | :--------------------------------------------------------------------------------------- |
+| A. Single perturbations (13 conditions, listed below)      | 1,000 per condition | 500 / 500   | 57.20% – 100.00%                                                                         |
+| A. Combined camera-like degradation                        | 1,000          | 500 / 500        | **84.90%** (95% CI 82.53–87.06); 151/500 tampered missed, 0/500 clean flagged            |
+| C. New unseen codes + unseen tamper types                  | 600            | 300 / 300        | **51.67%** (95% CI 47.59–55.73); 289/300 tampered missed, 1/300 clean flagged            |
 
-> If the unseen-tamper set is class-balanced, 50% is chance level, so 51.7% means the detector shows essentially no transfer to these tamper types. See `Tempered_Model/model extra validation.py.ipynb` for the exact construction.
+![Per-condition output of the external robustness check (Tempered_Model/model extra validation notebook)](external_validation_output.png)
+
+*Output of `Tempered_Model/model extra validation.py.ipynb`. Set A: 500 tampered + 500 clean images per condition; set C: 300 tampered + 300 clean.*
+
+Single perturbations in set A: JPEG (q70, q40), Gaussian blur (r1, r2), down/up-sampling (×2, ×4), rotation (±5°), brightness (0.6, 1.4), contrast (0.6), and Gaussian noise (σ = 10, 25). The unperturbed baseline and nine of the thirteen single perturbations reach 100.00%. The weakest single conditions are noise σ = 25 (57.20%, 428/500 tampered missed), blur r2 (96.30%, 37/500 clean flagged), down/up ×4 (96.00%, 39/500 clean flagged) and noise σ = 10 (98.60%).
+
+> The unseen-tamper set is class-balanced (300 / 300), so 50% is chance level. The detector missed 289 of 300 tampered codes (96.3%) and flagged only 1 of 300 clean codes, so on these tamper types it behaves almost like an "always clean" classifier. See `Tempered_Model/model extra validation.py.ipynb` for the exact construction.
 
 **Layer 2 — URL classifier** · public corpus of **651,191** URLs
 
@@ -227,9 +234,7 @@ Use your own private key and keep `ec_private.pem` **secret**. Only `ec_public.p
 | `Tempered_Model/model extra validation.py.ipynb`           | External robustness check (perturbations + unseen tamper types) → 84.9% / 51.7%                                        |
 | `URL_MODEL/Copy_of_qr_payload_analysis_newwwwww (3).ipynb` | 21-feature extraction, RF + XGBoost + MLP + LR on stratified & domain-disjoint splits, McNemar's test, duplicate audit |
 
-The CSVs in `URL_MODEL/` (`secureqr_model_comparison.csv`, `secureqr_mcnemar_domain_disjoint.csv`, `secureqr_table_iv_percent.csv`) contain the exact figures reported in the paper.
-
-**Archived release.** A permanent, citable snapshot of this repository is available on Zenodo: DOI [10.5281/zenodo.XXXXXXX](https://doi.org/10.5281/zenodo.XXXXXXX).
+The CSVs in `URL_MODEL/` (`secureqr_model_comparison.csv`, `secureqr_mcnemar_domain_disjoint.csv`, `secureqr_table_iv_percent.csv`) contain the exact figures reported in the manuscript.
 
 ---
 
@@ -266,7 +271,6 @@ If you use QRShield in your research, please cite:
   title   = {QRShield: A Multi-Layer Framework for Secure QR Code Detection and Malicious URL Classification},
   author  = {Hafeez, Memona and Abdulhaq, Nimra},
   year    = {2026},
-  doi     = {10.5281/zenodo.XXXXXXX},
   note    = {Manuscript. Dept. of Data Science and Artificial Intelligence,
              Khwaja Fareed University of Engineering and Information Technology (KFUEIT)}
 }
