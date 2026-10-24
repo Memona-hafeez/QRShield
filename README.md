@@ -11,6 +11,7 @@
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-EfficientNetB0-FF6F00?logo=tensorflow\&logoColor=white)
 ![scikit-learn](https://img.shields.io/badge/scikit--learn-Random%20Forest-F7931E?logo=scikitlearn\&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23588170.svg)](https://doi.org/10.5281/zenodo.23588170)
 
 </div>
 
@@ -253,6 +254,8 @@ Use your own private key and keep `ec_private.pem` **secret**. Only `ec_public.p
 
 The CSVs in `URL_MODEL/` (`secureqr_model_comparison.csv`, `secureqr_mcnemar_domain_disjoint.csv`, `secureqr_table_iv_percent.csv`) contain the exact figures reported in the manuscript.
 
+**Archived release.** A permanent, citable snapshot of this repository is available on Zenodo: DOI [10.5281/zenodo.23588170](https://doi.org/10.5281/zenodo.23588170).
+
 ---
 
 ## Security notice
@@ -284,10 +287,11 @@ Also note: a valid TLS certificate proves the connection is encrypted, **not** t
 If you use QRShield in your research, please cite:
 
 ```bibtex
-@article{hafeez2026qrshield,
+@misc{hafeez2026qrshield,
   title   = {QRShield: A Multi-Layer Framework for Secure QR Code Detection and Malicious URL Classification},
   author  = {Hafeez, Memona and Abdulhaq, Nimra},
   year    = {2026},
+  doi     = {10.5281/zenodo.23588170},
   note    = {Manuscript. Dept. of Data Science and Artificial Intelligence,
              Khwaja Fareed University of Engineering and Information Technology (KFUEIT)}
 }
